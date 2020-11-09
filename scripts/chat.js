@@ -66,22 +66,24 @@ function onStateChanged(user) {
         userProfile.name = firebase.auth().currentUser.displayName;
         userProfile.photoURL = firebase.auth().currentUser.photoURL;
 
-        var db = firebase.database.ref('users');
+        const db = firebase.database.ref('userDB');
         var flag = false;
+        alert(flag);
+
         db.on('value', function(users) {
+            alert('Inside ref');
             users.forEach(function(data) {
                 var user = data.val();
                 if (user.email === userProfile.email)
                     flag = true;
             });
 
-            if (flag === false) {
-                firebase.database().ref('users').push(userProfile, callback);
+            if (flag === true) {
+                firebase.database().ref('userDB').push(userProfile, callback);
             } else {
-                alert(firebase.auth().currentUser.email + '\n' + firebase.auth().currentUser.displayName + 'inside db function true else');
+                alert('already existed');
                 document.getElementById('imgProfile').src = firebase.auth().currentUser.photoURL;
                 document.getElementById('imgProfile').title = firebase.auth().currentUser.displayName;
-
                 document.getElementById('lnkSignIn').style = 'display:none';
                 document.getElementById('lnkSignOut').style = ' ';
             }
